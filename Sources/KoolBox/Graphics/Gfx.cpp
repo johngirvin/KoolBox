@@ -5,8 +5,8 @@ namespace KoolBox
 {
 
     Gfx::Gfx()
-    :   batcher(new Batcher()),
-        program(nullptr)
+            : batcher(new Batcher()),
+              program(nullptr)
     {
         assert(batcher);
     }
@@ -218,6 +218,8 @@ namespace KoolBox
         float *vbp;
         u16    vbi;
         batcher->allocate(6, 4, &ibp, &vbp, &vbi);
+        assert(ibp);
+        assert(vbp);
 
         // get size of quad
         Rect &bounds = item.region->bounds;
@@ -259,8 +261,7 @@ namespace KoolBox
 
             x3 = x0 + (x2 - x1);
             y3 = y2 - (y1 - y0);
-        }
-        else
+        } else
         {
             x0 = ql;
             y0 = qb;
@@ -312,12 +313,12 @@ namespace KoolBox
         // 1-2  1,2,0
         // |/|  0,2,3
         // 0-3
-        *ibp++ = vbi+1;
-        *ibp++ = vbi+2;
+        *ibp++ = vbi + 1;
+        *ibp++ = vbi + 2;
         *ibp++ = vbi;
         *ibp++ = vbi;
-        *ibp++ = vbi+2;
-        *ibp   = vbi+3;
+        *ibp++ = vbi + 2;
+        *ibp = vbi + 3;
 
         // write vertex data to buffer
         // 1-2  1,2,0
@@ -347,7 +348,115 @@ namespace KoolBox
         *vbp++ = y3;
         *vbp++ = uvr;
         *vbp++ = uvb;
-        *vbp   = *cp;
+        *vbp = *cp;
+    }
+
+    void Gfx::draw(Text &item)
+    {
+        // initialise
+        BitmapFont *font = item.font;
+        assert(font);
+        const char *text = item.text;
+        assert(text);
+
+        // count how many characters will actually be rendered
+        u16 textlen = (u16) strlen(text);
+        u16 textbuf = textlen;
+        for (int i = 0; i < textlen; i++)
+        {
+            BitmapFont::Char *cdef = font->getCharDef(text[i]);
+            if (cdef->w == 0 || cdef->h == 0)
+            {
+                textbuf--;
+            }
+        }
+        if (textbuf <= 0) {return;}   // just in case :D
+
+        // get buffer space for characters
+        int   *ibp;
+        float *vbp;
+        u16    vbi;
+        batcher->allocate((u16) 6 * textbuf, (u16) 4 * textbuf, &ibp, &vbp, &vbi);
+        assert(ibp);
+        assert(vbp);
+
+        // initialise part 2
+        float scalex = item.scale.x;
+        float scaley = item.scale.y;
+        Size bounds = font->getBounds(text, item.scale);
+        float x = item.position.x - (item.origin.x * bounds.w);
+        float y = item.position.y - (item.origin.y * bounds.h);
+        float col0 = item.colours.f[0];
+        float col1 = item.colours.f[1];
+        float col2 = item.colours.f[2];
+        float col3 = item.colours.f[3];
+
+        // render characters
+        for (int i = 0; i < textlen; i++)
+        {
+            // find the next Char entry
+            BitmapFont::Char *cdef = font->getCharDef(text[i]);
+            if (cdef->w > 0 && cdef->h > 0)
+            {
+                float l = x + (cdef->xOffset * scalex);
+                float b = y + (cdef->yOffset * scaley);
+                float r = l + (cdef->xSize * scalex);
+                float t = b + (cdef->ySize * scaley);
+
+                float ul = cdef->u;
+                float vb = cdef->v;
+                float ur = ul + cdef->w;
+                float vt = vb + cdef->h;
+
+                // write index data to buffer
+                // 1-2  1,2,0
+                // |/|  0,2,3
+                // 0-3
+                *ibp++ = vbi + 1;
+                *ibp++ = vbi + 2;
+                *ibp++ = vbi;
+                *ibp++ = vbi;
+                *ibp++ = vbi + 2;
+                *ibp++ = vbi + 3;
+                vbi += 4;
+
+                // write vertex data to buffer
+                // 1-2  1,2,0
+                // |/|  0,2,3
+                // 0-3
+                //
+                // 1 (TL)
+                *vbp++ = l;    // pos
+                *vbp++ = t;
+                *vbp++ = ul;   // tex
+                *vbp++ = vb;
+                *vbp++ = col1;
+
+                // 2 (TR)
+                *vbp++ = r;
+                *vbp++ = t;
+                *vbp++ = ur;
+                *vbp++ = vb;
+                *vbp++ = col2;
+
+                // 3 (BR)
+                *vbp++ = r;
+                *vbp++ = b;
+                *vbp++ = ur;
+                *vbp++ = vt;
+                *vbp++ = col3;
+
+                // 0 (BL)
+                *vbp++ = l;
+                *vbp++ = b;
+                *vbp++ = ul;
+                *vbp++ = vt;
+                *vbp++ = col0;
+            }
+
+            // step cursor to next character position
+            x += cdef->xAdvance * scalex;
+        }
     }
 
 }

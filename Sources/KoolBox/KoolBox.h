@@ -12,8 +12,8 @@
 #include "Camera/OrthographicStaticCamera.h"
 #include "Camera/ViewportAdapter.h"
 #include "Graphics/Program.h"
-//#include "TextureAtlas.h"
-#include "TextureRegion.h"
+#include "Graphics/TextureRegion.h"
+#include "Graphics/BitmapFont.h"
 
 #include "Input.h"
 #include "Scene.h"

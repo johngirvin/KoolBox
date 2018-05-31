@@ -4,6 +4,7 @@
 #include "KoolBoxShared.h"
 #include "Utility.h"
 #include "TextureAtlas.h"
+#include "BitmapFont.h"
 
 namespace KoolBox
 {
@@ -60,6 +61,25 @@ namespace KoolBox
             VertexColours   colours;
         };
 
+        struct Text
+        {
+            Text()
+            :   font(nullptr),
+                text(nullptr),
+                position(0.0, 0.0),
+                origin(0.5, 0.5),
+                scale(1.0, 1.0),
+                colours(Colour::White)
+            { };
+
+            BitmapFont      *font;
+            const char      *text;
+            V2              position;
+            V2              origin;
+            V2              scale;
+            VertexColours   colours;
+        };
+
         Gfx();
         ~Gfx();
 
@@ -105,6 +125,7 @@ namespace KoolBox
 
         // standard rendering
         void draw(Sprite &item);
+        void draw(Text &item);
 
         // custom rendering support
         // allocate space for user supplied indices and vertices
