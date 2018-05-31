@@ -25,6 +25,8 @@ namespace
     float maxY = 0;
     float fpsTime = 0;
     int   fpsCount = 0;
+    float fps  = 0;
+    char  info[128] = { 0 };
 
     int randomInt(int min, int max)
     {
@@ -119,6 +121,16 @@ namespace
                 gfx->setTexture(u_texture, s.region->texture);
                 gfx->draw(s);
             }
+
+            Gfx::Text text;
+            text.text = info;
+            text.position = { 10, 10 };
+            text.origin = { 0,0 };
+            text.scale = { 3,3 };
+            text.colours = { Colour::White };
+            text.font = Game::Assets::font;
+            gfx->setTexture(u_texture, Game::Assets::font->getTexture());
+            gfx->draw(text);
         }
         gfx->end();
     }
@@ -185,9 +197,10 @@ namespace Game
         fpsTime += time->deltaTimeF;
         fpsCount++;
         if (fpsTime > 1.0) {
-            Kore::log(LogLevel::Info, "%d @ %f FPS\n", bunny_c, (((float)fpsCount) / fpsTime));
-			fpsTime  = 0;
+            fps      = (((float)fpsCount) / fpsTime);
+            fpsTime  = 0;
             fpsCount = 0;
+            sprintf(info, "%d AT %f", bunny_c, fps);
         }
     }
 
