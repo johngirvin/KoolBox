@@ -33,18 +33,16 @@ namespace Game
         options.x               = 0;
         options.y               = 0;
         options.vSync           = true;
-		#if KORE_MACOS
+		#if (KORE_WINDOWS || KORE_MACOS)
 		options.mode			= WindowMode::WindowModeWindow;
-        options.width           = 1334;
-        options.height          = 750;
+		options.width			= 1334;
+		options.height			= 750;
         #elif KORE_IOS
-        options.width           = 1334;
-        options.height          = 750;
         options.mode            = WindowMode::WindowModeFullscreen;
+		options.width			= 1334;
+		options.height			= 750;
 		#else
-		options.mode			= WindowMode::WindowModeFullscreen;
-        options.width           = 32 + ((int)virtualSize.w * 3);
-        options.height          = 32 + ((int)virtualSize.h * 3);
+		options.mode			= WindowMode::WindowModeWindow;
         #endif
 		options.targetDisplay   = -1;
         options.rendererOptions.textureFormat     = 0;

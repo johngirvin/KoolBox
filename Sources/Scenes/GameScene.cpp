@@ -185,8 +185,8 @@ namespace Game
         fpsTime += time->deltaTimeF;
         fpsCount++;
         if (fpsTime > 1.0) {
-            printf("%d @ %.2f FPS\n", bunny_c, (((float)fpsCount) / fpsTime));
-            fpsTime  = 0;
+            Kore::log(LogLevel::Info, "%d @ %f FPS\n", bunny_c, (((float)fpsCount) / fpsTime));
+			fpsTime  = 0;
             fpsCount = 0;
         }
     }
