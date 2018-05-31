@@ -13,11 +13,12 @@ namespace Game
         return idSequence.next();
     }
 
-    VertexStructure *Assets::vs_posTexCol = nullptr;
-
+    VertexStructure *Assets::vs_posTexCol  = nullptr;
     PosTexColProgram *Assets::pr_posTexCol = nullptr;
 
     TextureAtlas     *Assets::sprites      = nullptr;
+
+    BitmapFont       *Assets::font         = nullptr;
 
     // ----------------------------------------------------------------------------------------------
 
@@ -35,8 +36,11 @@ namespace Game
         pr_posTexCol = new PosTexColProgram();
         pr_posTexCol->id = nextId();
 
-        //
+        // load test texture atlas
         sprites = new TextureAtlas("sprites");
+
+        // load test bitmap font
+        font = new BitmapFont("PressStart", sprites->getRegion("PressStart"));
     }
 
     Assets::~Assets()

@@ -2,6 +2,7 @@
 #define GAME_ASSETS_H
 
 #include "GameShared.h"
+#include "BitmapFont.h"
 #include "TextureAtlas.h"
 
 namespace Game
@@ -24,6 +25,7 @@ namespace Game
 
         //
         static TextureAtlas *sprites;
+        static BitmapFont   *font;
     };
 
 }
