@@ -1,6 +1,6 @@
 #include "Game.h"
 
-void kore(int argc, char **argv)
+int kore(int argc, char **argv)
 {
     // make sure there are some valid command line arguments
     static char *argvn[] = { (char*)"KoolboxGame" };
@@ -13,4 +13,6 @@ void kore(int argc, char **argv)
 	// create game
     auto *game = new Game::Game(argc, argv);
     Kore::System::start();
+
+	return 0;
 }
