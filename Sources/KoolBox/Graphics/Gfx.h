@@ -139,6 +139,9 @@ namespace KoolBox
         // vPos  - *vPos will be set to the initial index allocated
         void allocate(u16 iWant, u16 vWant, int **iPtr, float **vPtr, u16 *vPos);
 
+		// statistics
+		u32 getDrawCalls();
+
     private:
         Batcher *batcher;
         Program *program;

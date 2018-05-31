@@ -206,6 +206,11 @@ namespace KoolBox
         batcher->allocate(iWant, vWant, iPtr, vPtr, vPos);
     }
 
+	u32 Gfx::getDrawCalls()
+	{
+		return batcher->drawCalls;
+	}
+
     //
 
     void Gfx::draw(Sprite &item)
