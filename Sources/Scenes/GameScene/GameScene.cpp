@@ -15,7 +15,7 @@ namespace
 
     Kore::Graphics2::Graphics2 *G2;
 
-    Bunny bunnies[50000] = {0};
+    Bunny bunnies[100000] = {0};
     int bunny_c = 0;
     Texture *btex = nullptr;
     TextureRegion *breg = nullptr;
