@@ -296,10 +296,14 @@ namespace KoolBox
     {
         assert(begun);
 
-        if (state.ibPos > 0 && state.vbPos > 0)
+        if (locked)
         {
             unlock();
+        }
+        assert(!locked);
 
+        if (state.ibPos > 0 && state.vbPos > 0)
+        {
             // set buffers on the back end and submit
             VertexBuffer *vbList[8]  = { 0 };
             u32           vbListSize = 0;
@@ -320,12 +324,9 @@ namespace KoolBox
             drawCalls++;
         }
 
-        if (locked)
-        {
-            unlock();
-        }
-
         assert(!locked);
+        assert(state.ibPos == 0);
+        assert(state.vbPos == 0);
     }
 
     void Batcher::end()
