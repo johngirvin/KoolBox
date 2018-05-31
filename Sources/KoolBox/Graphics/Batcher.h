@@ -2,7 +2,6 @@
 #define KOOLBOX_GRAPHICS_BATCHER_H
 
 #include "KoolBox.h"
-#include "Vendor/TinySTL/unordered_map.h"
 
 namespace KoolBox
 {
